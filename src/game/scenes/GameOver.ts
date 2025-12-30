@@ -1,5 +1,5 @@
 import { Scene } from 'phaser';
-import { SCENE_KEYS, ASSET_KEYS, GAME_WIDTH, GAME_HEIGHT } from '../../constants';
+import { SCENE_KEYS, ASSET_KEYS, GAME_WIDTH, GAME_HEIGHT } from '../../shared/constants';
 
 export class GameOver extends Scene {
     camera: Phaser.Cameras.Scene2D.Camera;

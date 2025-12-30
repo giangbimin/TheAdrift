@@ -1,5 +1,5 @@
 import { Scene } from 'phaser';
-import { SCENE_KEYS, ASSET_KEYS, ASSET_URLS } from '../../constants';
+import { SCENE_KEYS, ASSET_KEYS, ASSET_URLS } from '../../shared/constants';
 
 export class Boot extends Scene {
     constructor() {

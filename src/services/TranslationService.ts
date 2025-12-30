@@ -1,6 +1,6 @@
-import { SETTINGS } from '../../constants';
-import { en } from '../../lang/en';
-import { vi } from '../../lang/vi';
+import { SETTINGS } from '../shared/constants';
+import { en } from '../shared/lang/en';
+import { vi } from '../shared/lang/vi';
 
 type SupportedLanguages = 'en' | 'vi';
 

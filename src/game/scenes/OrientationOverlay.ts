@@ -1,6 +1,6 @@
 import { Scene } from 'phaser';
-import { SCENE_KEYS, GAME_WIDTH, GAME_HEIGHT, COLORS } from '../../constants';
-import { t } from '../systems/TranslationManager';
+import { SCENE_KEYS, GAME_WIDTH, GAME_HEIGHT, COLORS } from '../../shared/constants';
+import { t } from '../../services/TranslationService';
 
 export class OrientationOverlay extends Scene {
     constructor() {

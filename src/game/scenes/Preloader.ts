@@ -1,6 +1,6 @@
 import { Scene } from 'phaser';
-import { SCENE_KEYS, ASSET_KEYS, ASSET_URLS, COLORS } from '../../constants';
-import { t } from '../systems/TranslationManager';
+import { SCENE_KEYS, ASSET_KEYS, ASSET_URLS, COLORS } from '../../shared/constants';
+import { t } from '../../services/TranslationService';
 
 export class Preloader extends Scene {
     constructor() {
@@ -51,6 +51,9 @@ export class Preloader extends Scene {
                 `URL: ${file.url}`
             );
         });
+
+        // Notify React that the scene is ready
+        EventBus.emit('current-scene-ready', this);
     }
 
     preload() {

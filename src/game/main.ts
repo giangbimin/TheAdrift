@@ -5,7 +5,8 @@ import { MainMenu } from './scenes/MainMenu';
 import { AUTO, Game, Scale } from 'phaser';
 import { Preloader } from './scenes/Preloader';
 import { OrientationOverlay } from './scenes/OrientationOverlay';
-import { SCENE_KEYS, GAME_WIDTH, GAME_HEIGHT, COLORS, GAME_VERSION } from '../constants';
+import { SCENE_KEYS, GAME_WIDTH, GAME_HEIGHT, COLORS, GAME_VERSION } from '../shared/constants';
+import { EventBus } from '../shared/EventBus';
 
 const isDev = import.meta.env.DEV;
 
@@ -61,6 +62,11 @@ const StartGame = (parent: string) => {
 
     // Initial check
     game.events.once('ready', checkOrientation);
+
+    // Event Bus Bridge
+    game.events.on('ready', () => {
+        // We can listen to scene events globally here if needed
+    });
 
     // Custom Styled Console Log for DX
     const logStyle = [

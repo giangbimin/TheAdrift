@@ -2,68 +2,57 @@
 trigger: always_on
 ---
 
-# Phaser 3 + TypeScript Game Development Rules
+# PHASER 3 + REACT HYBRID WORKSPACE RULES
 
-## 1. Project Architecture
-- **Strict Scene Management:** Always separate logic into Boot, Preloader, MainMenu, and GameScene.
-- **Dependency Injection:** Pass data between scenes using the `init(data)` method.
-- **Constants First:** Never hardcode strings (asset keys) or numbers (player speed, colors). Always check `src/constants.ts` first; if a constant is missing, create it.
+## 1. Project Context & Architecture
+- **Hybrid Framework:** - **React (UI Layer):** Handles Menus, HUD, Overlays, i18n switching, and Global State.
+    - **Phaser (Game Layer):** Handles Physics, Rendering, Sprite Animations, and Particle Systems.
+- **Directory Structure:**
+    - `/src/ui`: React Components, Hooks, and Styles.
+    - `/src/game`: Phaser Scenes, Prefabs, and Systems.
+    - `/src/services`: Singleton logic (Audio, API, Localization).
+    - `/src/store`: Global state management (Zustand/Redux).
+    - `/src/shared`: Constants, Types, and EventBus.
 
-## 2. Asset Management
-- **Centralized Keys:** Use the `ASSET_KEYS` object from `constants.ts` for all `load` and `add` calls.
-- **Preloading:** All assets must be loaded in `Preloader.ts`. Do not load assets inside the `GameScene` unless it's for dynamic/on-demand loading.
+## 2. Communication & State Bridge
+- **Event Bus:** Use a central `EventBus.ts` (Phaser.Events.EventEmitter) for decoupled communication.
+- **State Sync:** React manages the "Source of Truth" via a Global Store. Phaser reads from the Store on initialization and updates it via Events.
+- **No DOM in Phaser:** Never use `this.add.text` for complex UI. Use React Components overlaying the Canvas.
 
-## 3. Performance & Survivor Mechanics
-- **Object Pooling:** For bullets, enemies, and XP gems, always implement and use `Phaser.GameObjects.Group` with `runChildUpdate: true` to reuse objects.
-- **Physics:** Use `Arcade Physics` unless otherwise specified. Avoid complex polygon colliders to maintain 60FPS with high entity counts.
-- **Delta Time:** All movement logic must use the `delta` parameter from the `update(time, delta)` method to ensure frame-rate independent movement.
+## 3. Modular System (Antigravity Pattern)
+- **Logic Separation:** Keep pure calculation logic (damage formulas, XP curves) in `/src/systems` as standalone TS functions/classes.
+- **Service Injection:** Inject singleton services into Scenes. Scenes must not manage persistent data.
+- **File Naming:** kebab-case for filenames (`game-store.ts`), PascalCase for classes (`class PlayerController`).
 
-## 4. TypeScript & Code Style
-- **Strong Typing:** Define Interfaces for Game Data (e.g., `IPlayerStats`, `IEnemyConfig`). Avoid the `any` type.
-- **Private/Protected:** Use proper TS access modifiers for class properties and methods.
-- **Clean Code:** Keep Scene files under 300 lines. Move complex logic (e.g., Weapon Systems, Enemy AI) into separate "Prefabs" or "Systems" classes.
+## 4. Mobile-First & Responsive
+- **Scaling:** Use `Phaser.Scale.FIT` for the canvas. 
+- **Safe Area:** - **React:** Use CSS `env(safe-area-inset-*)` for UI elements.
+    - **Phaser:** Use relative coordinates (`width * 0.5`) and keep interactive objects within an 80% safe zone.
+- **Orientation:** Force Landscape. Implement an "Orientation Change" listener to pause/overlay if vertical.
 
-## 5. Mobile & Responsive
-- **Scaling:** Always assume a mobile-first responsive design. Use `this.cameras.main.width` and `height` for positioning UI elements relative to the screen.
-- **Input:** Implement both Keyboard (for desktop dev) and Virtual Joystick/Touch (for mobile) support.
+## 5. Multi-language (i18n)
+- **No Hardcoded Strings:** All text must go through `LangService` or `t('key')`.
+- **Dynamic Update:** When the Store's language changes, trigger an EventBus signal to update text objects currently rendered in Phaser.
 
-## 6. Environment & Debugging
-- **Debug Mode:** Link all physics debug and hitboxes to the `isDev` flag (Vite's `import.meta.env.DEV`). 
-- **Logging & DX:** 
-    - Always display a custom styled console log on startup showing `GAME_VERSION` and `DEV MODE` status.
-    - Implement enhanced asset loading error logging in `Preloader.ts` using the `loaderror` event.
-    - In `MainMenu`, if `isDev` is true, add a bottom corner overlay showing real-time FPS and Build Version.
+## 6. Performance & Survivor Logic
+- **Object Pooling:** Mandatory for Bullets, Enemies, and XP Gems using `Phaser.GameObjects.Group`.
+- **Delta Time:** All movement logic must use the `delta` parameter in `update(time, delta)` for frame-rate independence.
+- **Data-Driven:** Character/Enemy stats should be loaded from external JSON/Config files.
 
-## 7. Port & Process Management
-- **Port Conflict Check:** Before attempting to start the dev server, check if the default port (usually 5173) is already in use. If it is, attempt to kill the process or notify me before trying a different port.
-- **Process Persistence:** Always verify if the app is already running before executing `npm run dev`.
+## 7. Environment & Automation Flow
+- **Port Management:** Check port 5173 before `npm run dev`. Do not spawn multiple processes.
+- **Build-Check:** Always run `npm run build` after major logic changes to verify TS integrity.
+- **Headless Validation:** Do NOT use the browser agent for testing. Trust build logs and terminal output.
+- **Error Persistence:** Append all build/runtime errors to `dev_error.log`.
+- **Anti-Loop Policy:** Stop after 2 failed fix attempts for the same error. Do not repeat failed commands.
 
-## 8. Build & Post-Implementation Testing
-- **Automated Build:** After every major feature implementation or file change, run `npm run build` to ensure TypeScript compilation and Vite bundling are successful.
-- **Post-Build Execution:** Once the build is successful, execute the preview command (e.g., `npm run preview`) to verify the production bundle.
-- **Headless Validation:** Do NOT attempt to open or "run agent" to test inside a browser window. Verify success solely based on Terminal output and Build logs.
-
-## 9. Robust Error Logging & Anti-Loop
-- **Error Persistence:** If a build or runtime error occurs, append the error details to a file named `dev_error.log` in the project root.
-- **No-Loop Policy:** - If a specific fix fails more than twice, STOP and report the error to me. 
-    - DO NOT attempt the same command or logic repeatedly in a loop.
-    - Check the `dev_error.log` before attempting a fix to ensure you aren't repeating a failed strategy.
-
-## 10. Implementation Workflow
+## 8. Implementation Workflow
 1. Write/Modify Code.
 2. Run `npm run build`.
-3. If build fails -> Log error to `dev_error.log` -> Attempt fix (max 2 times) -> Stop if unresolved.
-4. If build succeeds -> Start the app using `npm run preview` or `npm run dev`.
+3. If build fails -> Log to `dev_error.log` -> Retry fix (max 2 times) -> Stop if unresolved.
+4. If build succeeds -> Start app using `npm run preview` or `npm run dev`.
 
-## 11. Mobile-First Scaling & Orientation
-- **Dynamic Sizing:** Always use `this.cameras.main.width` and `this.cameras.main.height` to calculate positions. 
-    - Use `0.5` for center, `0.1` for top/left margins, etc.
-- **Safe Area:** UI elements must be kept within a "Safe Zone" (80% of screen width/height) to avoid being cut off by mobile notches or rounded corners.
-- **Orientation Lock:** Force Landscape mode in `main.ts` but include a listener for `ORIENTATION_CHG` to pause the game or show a "Please Rotate Device" overlay if the aspect ratio is vertical.
-
-## 12. Multi-language (i18n) System
-- **No Hardcoded Text:** NEVER write raw strings in the Scene code.
-- **Translation Schema:** - Create `src/lang/en.ts` and `src/lang/vi.ts` (or other languages).
-    - Use a central `TranslationManager` class or a simple helper function `t(key: string)` to fetch strings.
-- **Font Support:** Ensure the chosen font supports Unicode characters (especially for Vietnamese/UTF-8).
-- **Dynamic Switching:** Implement a method in `MainMenu` to toggle between languages, which updates all active text objects immediately without restarting the scene.
+## 9. TypeScript & DX
+- **Strict Typing:** No `any`. Interfaces are required for all EventBus payloads and Store states.
+- **Branded Logs:** Display a styled console log on startup with `GAME_VERSION` and `isDev` status.
+- **Physics Debug:** Toggle Arcade Physics debug bodies via Vite's `import.meta.env.DEV`.
