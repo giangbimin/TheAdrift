@@ -1,5 +1,5 @@
 import { Scene, GameObjects } from 'phaser';
-import { SCENE_KEYS, ASSET_KEYS, GAME_WIDTH, GAME_HEIGHT, COLORS } from '../../constants';
+import { SCENE_KEYS, ASSET_KEYS, GAME_WIDTH, GAME_HEIGHT, COLORS, GAME_VERSION } from '../../constants';
 
 export class MainMenu extends Scene {
     private logo: GameObjects.Image;
@@ -33,6 +33,25 @@ export class MainMenu extends Scene {
         this.createButton(centerX, centerY + 20, 'START GAME', () => this.startGame());
         this.createButton(centerX, centerY + 100, 'OPTIONS', () => console.log('Options clicked'));
         this.createButton(centerX, centerY + 180, 'CREDITS', () => console.log('Credits clicked'));
+
+        // DX: FPS and Version Overlay
+        if (import.meta.env.DEV) {
+            this.createDebugOverlay();
+        }
+    }
+
+    private createDebugOverlay() {
+        const debugText = this.add.text(10, GAME_HEIGHT - 10, `v${GAME_VERSION} | FPS: 0`, {
+            fontSize: '14px',
+            color: '#00ff00',
+            fontFamily: 'monospace',
+            backgroundColor: '#000000bb',
+            padding: { x: 5, y: 2 }
+        }).setOrigin(0, 1).setDepth(1000);
+
+        this.events.on('update', () => {
+            debugText.setText(`v${GAME_VERSION} | FPS: ${Math.round(this.game.loop.actualFps)}`);
+        });
     }
 
     private createButton(x: number, y: number, text: string, callback: () => void) {

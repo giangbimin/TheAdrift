@@ -39,6 +39,15 @@ export class Preloader extends Scene {
         this.load.on('complete', () => {
             loadingText.setText('Complete!');
         });
+
+        // DX: Enhanced error logging for asset loading
+        this.load.on('loaderror', (file: Phaser.Loader.File) => {
+            console.error(
+                `%c ❌ ASSET LOAD ERROR: [${file.key}] `,
+                'background: #ff0000; color: #ffffff; font-weight: bold; padding: 2px 5px; border-radius: 3px;',
+                `URL: ${file.url}`
+            );
+        });
     }
 
     preload() {

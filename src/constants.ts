@@ -1,5 +1,6 @@
 export const GAME_WIDTH = 1024;
 export const GAME_HEIGHT = 768;
+export const GAME_VERSION = '0.1.0-alpha';
 
 export const SCENE_KEYS = {
     BOOT: 'Boot',
