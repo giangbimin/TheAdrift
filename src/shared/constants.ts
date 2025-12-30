@@ -32,7 +32,7 @@ export const ASSET_URLS = {
 } as const;
 
 export const COLORS = {
-    BACKGROUND: 0x028af8,
+    BACKGROUND: 0x0f041d,
     PRIMARY: 0xffffff,
     SECONDARY: 0x000000,
     ACCENT: 0xffcc00

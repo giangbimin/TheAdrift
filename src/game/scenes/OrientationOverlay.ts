@@ -11,13 +11,15 @@ export class OrientationOverlay extends Scene {
         const cx = GAME_WIDTH / 2;
         const cy = GAME_HEIGHT / 2;
 
-        this.add.rectangle(cx, cy, GAME_WIDTH, GAME_HEIGHT, COLORS.SECONDARY, 0.9)
+        // Ensure we draw over everything
+        this.add.rectangle(cx, cy, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.8)
             .setInteractive();
 
         this.add.text(cx, cy, t('please_rotate'), {
-            fontSize: '32px',
-            color: '#ffffff',
+            fontSize: '48px',
+            color: '#ffcc00',
             align: 'center',
+            fontStyle: 'bold',
             wordWrap: { width: GAME_WIDTH * 0.8 }
         }).setOrigin(0.5);
     }

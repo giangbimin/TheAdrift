@@ -1,5 +1,6 @@
 import { Scene } from 'phaser';
 import { SCENE_KEYS, ASSET_KEYS, ASSET_URLS } from '../../shared/constants';
+import { EventBus } from '../../shared/EventBus';
 
 export class Boot extends Scene {
     constructor() {
@@ -7,11 +8,13 @@ export class Boot extends Scene {
     }
 
     preload() {
-        // Load a simple placeholder logo for the boot transition
+        //  The Boot Scene is responsible for loading any assets that are required for your Preloader
         this.load.image(ASSET_KEYS.BOOT_LOGO, ASSET_URLS.BOOT_LOGO);
     }
 
     create() {
+        console.log('[Phaser] Boot Scene Create');
+        EventBus.emit('current-scene-ready', this);
         this.scene.start(SCENE_KEYS.PRELOADER);
     }
 }

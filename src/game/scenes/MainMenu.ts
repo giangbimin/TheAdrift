@@ -37,6 +37,7 @@ export class MainMenu extends Scene {
         this.events.on('ui-start-game', () => this.startGame());
 
         // Notify React that the scene is ready
+        console.log('[Phaser] MainMenu Scene Create');
         EventBus.emit('current-scene-ready', this);
     }
 

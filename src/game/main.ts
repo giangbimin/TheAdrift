@@ -10,8 +10,6 @@ import { EventBus } from '../shared/EventBus';
 
 const isDev = import.meta.env.DEV;
 
-//  Find out more information about the Game Config at:
-//  https://docs.phaser.io/api-documentation/typedef/types-core#gameconfig
 const config: Phaser.Types.Core.GameConfig = {
     type: AUTO,
     width: GAME_WIDTH,
@@ -44,28 +42,43 @@ const StartGame = (parent: string) => {
 
     // Orientation Management
     const checkOrientation = () => {
+        // Only trigger orientation lock on mobile or if specifically desired
+        // For now, let's check for extreme portrait aspect ratios
         const isPortrait = window.innerHeight > window.innerWidth;
+        const overlayScene = game.scene.getScene(SCENE_KEYS.ORIENTATION_OVERLAY);
+
         if (isPortrait) {
-            game.scene.pause(SCENE_KEYS.MAIN_MENU);
-            game.scene.pause(SCENE_KEYS.GAME);
-            game.scene.start(SCENE_KEYS.ORIENTATION_OVERLAY);
-            game.scene.bringToTop(SCENE_KEYS.ORIENTATION_OVERLAY);
+            if (!game.scene.isActive(SCENE_KEYS.ORIENTATION_OVERLAY)) {
+                game.scene.pause(SCENE_KEYS.MAIN_MENU);
+                game.scene.pause(SCENE_KEYS.GAME);
+                game.scene.start(SCENE_KEYS.ORIENTATION_OVERLAY);
+                game.scene.bringToTop(SCENE_KEYS.ORIENTATION_OVERLAY);
+            }
         } else {
-            game.scene.stop(SCENE_KEYS.ORIENTATION_OVERLAY);
-            game.scene.resume(SCENE_KEYS.MAIN_MENU);
-            game.scene.resume(SCENE_KEYS.GAME);
+            if (game.scene.isActive(SCENE_KEYS.ORIENTATION_OVERLAY)) {
+                game.scene.stop(SCENE_KEYS.ORIENTATION_OVERLAY);
+                game.scene.resume(SCENE_KEYS.MAIN_MENU);
+                game.scene.resume(SCENE_KEYS.GAME);
+            }
         }
     };
 
     window.addEventListener('resize', checkOrientation);
     window.addEventListener('orientationchange', checkOrientation);
 
-    // Initial check
-    game.events.once('ready', checkOrientation);
+    // Initial check after a short delay to let scenes initialize
+    game.events.once('ready', () => {
+        setTimeout(checkOrientation, 100);
+    });
 
     // Event Bus Bridge
     game.events.on('ready', () => {
-        // We can listen to scene events globally here if needed
+        // Listen to all scene starts
+        game.scene.scenes.forEach(scene => {
+            scene.events.on('create', () => {
+                EventBus.emit('current-scene-ready', scene);
+            });
+        });
     });
 
     // Custom Styled Console Log for DX

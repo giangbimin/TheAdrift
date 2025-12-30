@@ -1,6 +1,7 @@
 import { Scene } from 'phaser';
 import { SCENE_KEYS, ASSET_KEYS, ASSET_URLS, COLORS } from '../../shared/constants';
 import { t } from '../../services/TranslationService';
+import { EventBus } from '../../shared/EventBus';
 
 export class Preloader extends Scene {
     constructor() {
@@ -8,6 +9,7 @@ export class Preloader extends Scene {
     }
 
     init() {
+        console.log('[Phaser] Preloader Scene Init');
         const width = this.cameras.main.width;
         const height = this.cameras.main.height;
         const centerX = width * 0.5;
@@ -57,6 +59,7 @@ export class Preloader extends Scene {
     }
 
     preload() {
+        console.log('[Phaser] Preloader Scene Preload');
         // Load all game assets
         this.load.image(ASSET_KEYS.BACKGROUND, ASSET_URLS.BACKGROUND);
         this.load.audio(ASSET_KEYS.CLICK_SFX, ASSET_URLS.CLICK_SFX);
@@ -67,6 +70,7 @@ export class Preloader extends Scene {
     }
 
     create() {
+        console.log('[Phaser] Preloader Scene Create');
         // Delay transition slightly to show "Complete!" message
         this.time.delayedCall(500, () => {
             this.scene.start(SCENE_KEYS.MAIN_MENU);
