@@ -1,38 +1,46 @@
 import { Scene, GameObjects } from 'phaser';
-import { SCENE_KEYS, ASSET_KEYS, GAME_WIDTH, GAME_HEIGHT, COLORS, GAME_VERSION } from '../../constants';
+import { SCENE_KEYS, ASSET_KEYS, GAME_VERSION, COLORS } from '../../constants';
+import { t, translationManager } from '../systems/TranslationManager';
 
 export class MainMenu extends Scene {
     private logo: GameObjects.Image;
     private bgmStarted: boolean = false;
+    private buttons: GameObjects.Group;
+    private languageText: GameObjects.Text;
 
     constructor() {
         super(SCENE_KEYS.MAIN_MENU);
     }
 
     create() {
-        const centerX = GAME_WIDTH / 2;
-        const centerY = GAME_HEIGHT / 2;
+        const width = this.cameras.main.width;
+        const height = this.cameras.main.height;
+        const centerX = width * 0.5;
+        const centerY = height * 0.5;
 
         // Background
-        this.add.image(centerX, centerY, ASSET_KEYS.BACKGROUND).setOrigin(0.5).setDisplaySize(GAME_WIDTH, GAME_HEIGHT);
+        this.add.image(centerX, centerY, ASSET_KEYS.BACKGROUND)
+            .setOrigin(0.5)
+            .setDisplaySize(width, height);
 
         // Animated Logo
-        this.logo = this.add.image(centerX, centerY - 150, ASSET_KEYS.PHASER_LOGO);
+        this.logo = this.add.image(centerX, height * 0.3, ASSET_KEYS.PHASER_LOGO);
 
-        // Add a floating animation to the logo
         this.tweens.add({
             targets: this.logo,
-            y: centerY - 170,
+            y: (height * 0.3) - 20,
             duration: 2000,
             ease: 'Sine.easeInOut',
             yoyo: true,
             repeat: -1
         });
 
-        // Interactive Buttons
-        this.createButton(centerX, centerY + 20, 'START GAME', () => this.startGame());
-        this.createButton(centerX, centerY + 100, 'OPTIONS', () => console.log('Options clicked'));
-        this.createButton(centerX, centerY + 180, 'CREDITS', () => console.log('Credits clicked'));
+        // Interactive Buttons Group
+        this.buttons = this.add.group();
+        this.createMenu();
+
+        // Language Switch Button (Top Right)
+        this.createLanguageButton();
 
         // DX: FPS and Version Overlay
         if (import.meta.env.DEV) {
@@ -40,8 +48,49 @@ export class MainMenu extends Scene {
         }
     }
 
+    private createMenu() {
+        const width = this.cameras.main.width;
+        const height = this.cameras.main.height;
+        const centerX = width * 0.5;
+
+        this.buttons.clear(true, true);
+
+        this.createButton(centerX, height * 0.55, t('start_game'), () => this.startGame());
+        this.createButton(centerX, height * 0.68, t('options'), () => console.log('Options clicked'));
+        this.createButton(centerX, height * 0.81, t('credits'), () => console.log('Credits clicked'));
+    }
+
+    private createLanguageButton() {
+        const width = this.cameras.main.width;
+        const margin = width * 0.05;
+
+        const langBtn = this.add.container(width - margin - 50, margin + 30);
+        const bg = this.add.rectangle(0, 0, 100, 40, COLORS.SECONDARY, 0.8)
+            .setStrokeStyle(2, COLORS.PRIMARY)
+            .setInteractive({ useHandCursor: true });
+
+        this.languageText = this.add.text(0, 0, translationManager.getCurrentLanguage().toUpperCase(), {
+            fontSize: '18px',
+            color: '#ffffff',
+            fontFamily: 'Arial'
+        }).setOrigin(0.5);
+
+        langBtn.add([bg, this.languageText]);
+
+        bg.on('pointerdown', () => {
+            translationManager.toggleLanguage();
+            this.updateLanguage();
+        });
+    }
+
+    private updateLanguage() {
+        this.languageText.setText(translationManager.getCurrentLanguage().toUpperCase());
+        this.createMenu();
+    }
+
     private createDebugOverlay() {
-        const debugText = this.add.text(10, GAME_HEIGHT - 10, `v${GAME_VERSION} | FPS: 0`, {
+        const height = this.cameras.main.height;
+        const debugText = this.add.text(10, height - 10, `v${GAME_VERSION} | FPS: 0`, {
             fontSize: '14px',
             color: '#00ff00',
             fontFamily: 'monospace',
@@ -54,16 +103,19 @@ export class MainMenu extends Scene {
         });
     }
 
-    private createButton(x: number, y: number, text: string, callback: () => void) {
-        const btnBg = this.add.rectangle(x, y, 250, 60, COLORS.SECONDARY, 0.8)
+    private createButton(x: number, y: number, textString: string, callback: () => void) {
+        const btnBg = this.add.rectangle(x, y, 280, 70, COLORS.SECONDARY, 0.8)
             .setInteractive({ useHandCursor: true })
             .setStrokeStyle(2, COLORS.PRIMARY);
 
-        const btnText = this.add.text(x, y, text, {
+        const btnText = this.add.text(x, y, textString, {
             fontSize: '28px',
             color: '#ffffff',
             fontFamily: 'Arial Black'
         }).setOrigin(0.5);
+
+        this.buttons.add(btnBg);
+        this.buttons.add(btnText);
 
         // Hover events
         btnBg.on('pointerover', () => {
@@ -72,7 +124,7 @@ export class MainMenu extends Scene {
             btnText.setColor('#000000');
             this.tweens.add({
                 targets: [btnBg, btnText],
-                scale: 1.1,
+                scale: 1.05,
                 duration: 100
             });
         });
@@ -90,10 +142,8 @@ export class MainMenu extends Scene {
 
         // Click event
         btnBg.on('pointerdown', () => {
-            // Play click sound
             this.sound.play(ASSET_KEYS.CLICK_SFX);
 
-            // Start BGM on first interaction if not started
             if (!this.bgmStarted) {
                 this.sound.play(ASSET_KEYS.MENU_BGM, { loop: true, volume: 0.5 });
                 this.bgmStarted = true;
@@ -104,7 +154,6 @@ export class MainMenu extends Scene {
     }
 
     private startGame() {
-        // Flash effect before starting
         this.cameras.main.flash(500);
         this.time.delayedCall(500, () => {
             this.scene.start(SCENE_KEYS.GAME);

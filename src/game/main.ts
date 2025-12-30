@@ -4,7 +4,8 @@ import { Game as MainGame } from './scenes/Game';
 import { MainMenu } from './scenes/MainMenu';
 import { AUTO, Game, Scale } from 'phaser';
 import { Preloader } from './scenes/Preloader';
-import { GAME_WIDTH, GAME_HEIGHT, COLORS, GAME_VERSION } from '../constants';
+import { OrientationOverlay } from './scenes/OrientationOverlay';
+import { SCENE_KEYS, GAME_WIDTH, GAME_HEIGHT, COLORS, GAME_VERSION } from '../constants';
 
 const isDev = import.meta.env.DEV;
 
@@ -31,13 +32,35 @@ const config: Phaser.Types.Core.GameConfig = {
         Preloader,
         MainMenu,
         MainGame,
-        GameOver
+        GameOver,
+        OrientationOverlay
     ]
 };
 
 const StartGame = (parent: string) => {
 
     const game = new Game({ ...config, parent });
+
+    // Orientation Management
+    const checkOrientation = () => {
+        const isPortrait = window.innerHeight > window.innerWidth;
+        if (isPortrait) {
+            game.scene.pause(SCENE_KEYS.MAIN_MENU);
+            game.scene.pause(SCENE_KEYS.GAME);
+            game.scene.start(SCENE_KEYS.ORIENTATION_OVERLAY);
+            game.scene.bringToTop(SCENE_KEYS.ORIENTATION_OVERLAY);
+        } else {
+            game.scene.stop(SCENE_KEYS.ORIENTATION_OVERLAY);
+            game.scene.resume(SCENE_KEYS.MAIN_MENU);
+            game.scene.resume(SCENE_KEYS.GAME);
+        }
+    };
+
+    window.addEventListener('resize', checkOrientation);
+    window.addEventListener('orientationchange', checkOrientation);
+
+    // Initial check
+    game.events.once('ready', checkOrientation);
 
     // Custom Styled Console Log for DX
     const logStyle = [

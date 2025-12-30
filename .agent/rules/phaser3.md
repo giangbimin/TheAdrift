@@ -54,3 +54,16 @@ trigger: always_on
 2. Run `npm run build`.
 3. If build fails -> Log error to `dev_error.log` -> Attempt fix (max 2 times) -> Stop if unresolved.
 4. If build succeeds -> Start the app using `npm run preview` or `npm run dev`.
+
+## 11. Mobile-First Scaling & Orientation
+- **Dynamic Sizing:** Always use `this.cameras.main.width` and `this.cameras.main.height` to calculate positions. 
+    - Use `0.5` for center, `0.1` for top/left margins, etc.
+- **Safe Area:** UI elements must be kept within a "Safe Zone" (80% of screen width/height) to avoid being cut off by mobile notches or rounded corners.
+- **Orientation Lock:** Force Landscape mode in `main.ts` but include a listener for `ORIENTATION_CHG` to pause the game or show a "Please Rotate Device" overlay if the aspect ratio is vertical.
+
+## 12. Multi-language (i18n) System
+- **No Hardcoded Text:** NEVER write raw strings in the Scene code.
+- **Translation Schema:** - Create `src/lang/en.ts` and `src/lang/vi.ts` (or other languages).
+    - Use a central `TranslationManager` class or a simple helper function `t(key: string)` to fetch strings.
+- **Font Support:** Ensure the chosen font supports Unicode characters (especially for Vietnamese/UTF-8).
+- **Dynamic Switching:** Implement a method in `MainMenu` to toggle between languages, which updates all active text objects immediately without restarting the scene.

@@ -1,5 +1,6 @@
 import { Scene } from 'phaser';
-import { SCENE_KEYS, ASSET_KEYS, ASSET_URLS, GAME_WIDTH, GAME_HEIGHT, COLORS } from '../../constants';
+import { SCENE_KEYS, ASSET_KEYS, ASSET_URLS, COLORS } from '../../constants';
+import { t } from '../systems/TranslationManager';
 
 export class Preloader extends Scene {
     constructor() {
@@ -7,15 +8,17 @@ export class Preloader extends Scene {
     }
 
     init() {
-        const centerX = GAME_WIDTH / 2;
-        const centerY = GAME_HEIGHT / 2;
+        const width = this.cameras.main.width;
+        const height = this.cameras.main.height;
+        const centerX = width * 0.5;
+        const centerY = height * 0.5;
 
         // Background for the progress bar
-        const barWidth = 400;
+        const barWidth = width * 0.4;
         const barHeight = 30;
 
         // Add the boot logo we loaded in the Boot Scene
-        this.add.image(centerX, centerY - 100, ASSET_KEYS.BOOT_LOGO);
+        this.add.image(centerX, height * 0.4, ASSET_KEYS.BOOT_LOGO);
 
         // Progress bar background (outline)
         this.add.rectangle(centerX, centerY, barWidth, barHeight).setStrokeStyle(2, COLORS.PRIMARY);
@@ -23,8 +26,8 @@ export class Preloader extends Scene {
         // Progress bar fill
         const barFill = this.add.rectangle(centerX - barWidth / 2 + 4, centerY, 0, barHeight - 8, COLORS.ACCENT).setOrigin(0, 0.5);
 
-        // Loading text
-        const loadingText = this.add.text(centerX, centerY + 50, 'Loading... 0%', {
+        // Loading text using i18n
+        const loadingText = this.add.text(centerX, centerY + 50, `${t('loading')} 0%`, {
             fontSize: '24px',
             color: '#ffffff',
             fontFamily: 'Arial'
@@ -33,11 +36,11 @@ export class Preloader extends Scene {
         // Use the 'progress' event emitted by the LoaderPlugin to update the loading bar
         this.load.on('progress', (progress: number) => {
             barFill.width = (barWidth - 8) * progress;
-            loadingText.setText(`Loading... ${Math.round(progress * 100)}%`);
+            loadingText.setText(`${t('loading')} ${Math.round(progress * 100)}%`);
         });
 
         this.load.on('complete', () => {
-            loadingText.setText('Complete!');
+            loadingText.setText(t('complete'));
         });
 
         // DX: Enhanced error logging for asset loading

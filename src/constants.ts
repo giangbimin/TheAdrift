@@ -7,7 +7,13 @@ export const SCENE_KEYS = {
     PRELOADER: 'Preloader',
     MAIN_MENU: 'MainMenu',
     GAME: 'Game',
-    GAME_OVER: 'GameOver'
+    GAME_OVER: 'GameOver',
+    ORIENTATION_OVERLAY: 'OrientationOverlay'
+} as const;
+
+export const SETTINGS = {
+    SAFE_ZONE_PERCENT: 0.8,
+    DEFAULT_LANG: 'en'
 } as const;
 
 export const ASSET_KEYS = {
