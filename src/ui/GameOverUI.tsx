@@ -1,6 +1,8 @@
 import React from 'react';
 import { useGameStore } from '../store/game-store';
 import { EventBus } from '../shared/EventBus';
+import { Button } from '../components/ui/button';
+import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/card';
 
 export const GameOverUI: React.FC = () => {
     const { isGameOver, resetGame } = useGameStore();
@@ -13,80 +15,29 @@ export const GameOverUI: React.FC = () => {
     if (!isGameOver) return null;
 
     return (
-        <div className="game-over-ui">
-            <div className="content">
-                <h1 className="title">MISSION FAILED</h1>
-                <div className="status-line">SIGNAL LOST</div>
+        <div className="fixed inset-0 flex items-center justify-center bg-black/85 z-50 backdrop-blur-sm animate-fade-in font-orbitron">
+            <Card variant="cyber" className="w-[90vw] max-w-md border-red-500/50 shadow-[0_0_50px_rgba(255,0,0,0.4)]">
+                <CardHeader className="text-center pb-2">
+                    <CardTitle className="text-[8vmin] md:text-5xl text-red-500 tracking-[0.2em] animate-pulse">
+                        MISSION FAILED
+                    </CardTitle>
+                </CardHeader>
 
-                <button className="cyber-btn restart" onClick={handleRestart}>
-                    REBOOT SYSTEM
-                </button>
-            </div>
+                <CardContent className="flex flex-col items-center gap-8 pt-4">
+                    <div className="text-xl md:text-2xl text-white/80 tracking-widest uppercase">
+                        SIGNAL LOST
+                    </div>
 
-            <style>{`
-                @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap');
-
-                .game-over-ui {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    background: rgba(10, 0, 0, 0.85);
-                    z-index: 100;
-                    font-family: 'Orbitron', sans-serif;
-                    backdrop-filter: blur(10px);
-                    animation: fadeIn 0.5s ease-out;
-                }
-
-                .content {
-                    text-align: center;
-                    color: #ff3333;
-                }
-
-                .title {
-                    font-size: 8vmin;
-                    margin: 0;
-                    text-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
-                    letter-spacing: 5px;
-                }
-
-                .status-line {
-                    font-size: 3vmin;
-                    color: #fff;
-                    margin-bottom: 50px;
-                    opacity: 0.8;
-                }
-
-                .cyber-btn {
-                    padding: 2vmin 4vmin;
-                    background: linear-gradient(90deg, rgba(255, 50, 50, 0.2), rgba(255, 50, 50, 0.4));
-                    border: 1px solid #ff3333;
-                    color: #fff;
-                    font-family: 'Orbitron', sans-serif;
-                    font-weight: 700;
-                    font-size: 2.5vmin;
-                    text-transform: uppercase;
-                    cursor: pointer;
-                    box-shadow: 0 0 15px rgba(255, 50, 50, 0.3);
-                    transition: all 0.3s;
-                    position: relative;
-                }
-
-                .cyber-btn:hover {
-                    background: rgba(255, 50, 50, 0.6);
-                    box-shadow: 0 0 30px rgba(255, 50, 50, 0.6);
-                    letter-spacing: 2px;
-                }
-
-                @keyframes fadeIn {
-                    from { opacity: 0; }
-                    to { opacity: 1; }
-                }
-            `}</style>
+                    <Button
+                        variant="exit"
+                        size="cyber"
+                        onClick={handleRestart}
+                        className="w-full text-xl py-6"
+                    >
+                        REBOOT SYSTEM
+                    </Button>
+                </CardContent>
+            </Card>
         </div>
     );
 };

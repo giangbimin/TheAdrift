@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useGameStore } from '../store/game-store';
 import { ASSET_URLS } from '../shared/constants';
 import { Button } from '../components/ui/button';
+import { Card } from '../components/ui/card';
 
 export const LoginScreen: React.FC = () => {
     const { session, login } = useGameStore();
@@ -30,7 +31,7 @@ export const LoginScreen: React.FC = () => {
 
                 {/* Right Side: Login Form */}
                 <div className="right-panel">
-                    <div className="login-box">
+                    <Card variant="cyber" className="w-full max-w-[380px] p-10">
                         <div className="login-title">PILOT IDENTIFICATION</div>
 
                         <div className="input-wrapper">
@@ -52,7 +53,7 @@ export const LoginScreen: React.FC = () => {
                         <div className="system-status">
                             SYSTEM STATUS: <span className="online">ONLINE</span>
                         </div>
-                    </div>
+                    </Card>
                 </div>
             </div>
 
@@ -139,45 +140,7 @@ export const LoginScreen: React.FC = () => {
                     animation: slideInRight 0.8s ease-out;
                 }
 
-                .login-box {
-                    width: 100%;
-                    max-width: 380px;
-                    padding: 40px;
-                    background: rgba(0, 10, 20, 0.85);
-                    border: 2px solid rgba(0, 240, 255, 0.3);
-                    border-radius: 4px;
-                    backdrop-filter: blur(15px);
-                    position: relative;
-                    /* Fancy border corners */
-                    box-shadow: 
-                        0 0 20px rgba(0, 0, 0, 0.5),
-                        inset 0 0 20px rgba(0, 240, 255, 0.05);
-                }
-
-                /* Corner Accents */
-                .login-box::before {
-                    content: '';
-                    position: absolute;
-                    top: -2px;
-                    left: -2px;
-                    width: 20px;
-                    height: 20px;
-                    border-top: 2px solid #00f0ff;
-                    border-left: 2px solid #00f0ff;
-                    box-shadow: -2px -2px 10px rgba(0, 240, 255, 0.5);
-                }
-
-                .login-box::after {
-                    content: '';
-                    position: absolute;
-                    bottom: -2px;
-                    right: -2px;
-                    width: 20px;
-                    height: 20px;
-                    border-bottom: 2px solid #00f0ff;
-                    border-right: 2px solid #00f0ff;
-                    box-shadow: 2px 2px 10px rgba(0, 240, 255, 0.5);
-                }
+                /* Login Box styles handled by Card component */
 
                 .login-title {
                     color: #fff;
@@ -266,10 +229,7 @@ export const LoginScreen: React.FC = () => {
                        max-width: 350px; /* Limit logo size on small heights */
                    }
                    
-                   .login-box {
-                       padding: 20px;
-                       max-width: 320px;
-                   }
+                   /* Login Box overrides handled by component classNames */
                    
                    .login-title {
                        font-size: 16px;

@@ -2,6 +2,8 @@ import React from 'react';
 import { useGameStore } from '../store/game-store';
 import { translationManager, t } from '../services/TranslationService';
 import { IRefPhaserGame } from './PhaserGame';
+import { Button } from '../components/ui/button';
+import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/card';
 
 interface IProps {
     phaserRef: React.RefObject<IRefPhaserGame>;
@@ -30,83 +32,40 @@ export const PauseMenuUI: React.FC<IProps> = ({ phaserRef }) => {
     };
 
     return (
-        <div className="pause-overlay">
-            <div className="pause-content">
-                <h1>{t('paused') || 'PAUSED'}</h1>
-                <div className="button-group">
-                    <button className="menu-button" onClick={handleResume}>
+        <div className="fixed inset-0 flex items-center justify-center bg-black/60 z-50 backdrop-blur-sm font-orbitron">
+            <Card variant="cyber" className="w-[90vw] max-w-sm border-amber-400/50 shadow-[0_0_50px_rgba(255,204,0,0.2)]">
+                <CardHeader className="text-center pb-2">
+                    <CardTitle className="text-4xl text-amber-400 tracking-widest uppercase drop-shadow-[0_0_10px_rgba(255,204,0,0.5)]">
+                        {t('paused') || 'PAUSED'}
+                    </CardTitle>
+                </CardHeader>
+
+                <CardContent className="flex flex-col gap-4 p-8 pt-4">
+                    <Button
+                        variant="cyber"
+                        className="w-full text-lg border-amber-400/50 hover:bg-amber-400/20 hover:border-amber-400 hover:shadow-[0_0_20px_rgba(255,204,0,0.4)] text-amber-100"
+                        onClick={handleResume}
+                    >
                         {t('resume') || 'RESUME'}
-                    </button>
-                    <button className="menu-button" onClick={toggleLanguage}>
+                    </Button>
+
+                    <Button
+                        variant="cyber"
+                        className="w-full text-lg border-white/30 text-white/80"
+                        onClick={toggleLanguage}
+                    >
                         {t('language') || 'LANGUAGE'}: {language.toUpperCase()}
-                    </button>
-                    <button className="menu-button quit" onClick={handleQuit}>
+                    </Button>
+
+                    <Button
+                        variant="exit"
+                        className="w-full text-lg mt-4"
+                        onClick={handleQuit}
+                    >
                         {t('quit') || 'QUIT'}
-                    </button>
-                </div>
-            </div>
-
-            <style>{`
-                .pause-overlay {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    background: rgba(0, 0, 0, 0.7);
-                    backdrop-filter: blur(5px);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    z-index: 100;
-                    color: white;
-                    font-family: 'Arial Black', sans-serif;
-                }
-
-                .pause-content {
-                    background: rgba(40, 40, 40, 0.9);
-                    padding: 40px;
-                    border: 4px solid #ffcc00;
-                    border-radius: 15px;
-                    text-align: center;
-                    box-shadow: 0 0 30px rgba(255, 204, 0, 0.3);
-                }
-
-                h1 {
-                    font-size: 48px;
-                    margin-bottom: 30px;
-                    color: #ffcc00;
-                    text-shadow: 4px 4px 0px #000;
-                }
-
-                .button-group {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 15px;
-                }
-
-                .menu-button {
-                    width: 250px;
-                    height: 50px;
-                    background: #222;
-                    color: white;
-                    border: 2px solid white;
-                    font-size: 20px;
-                    cursor: pointer;
-                    transition: all 0.1s;
-                }
-
-                .menu-button:hover {
-                    background: #ffcc00;
-                    color: black;
-                    transform: scale(1.05);
-                }
-
-                .menu-button.quit:hover {
-                    background: #ff4444;
-                    color: white;
-                }
-            `}</style>
+                    </Button>
+                </CardContent>
+            </Card>
         </div>
     );
 };
