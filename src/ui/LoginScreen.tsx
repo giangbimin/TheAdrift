@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useGameStore } from '../store/game-store';
 import { ASSET_URLS } from '../shared/constants';
-import { Button } from '../components/ui/button';
-import { Card } from '../components/ui/card';
+import { Button } from './basic/button';
+import { Card } from './basic/card';
 
 export const LoginScreen: React.FC = () => {
     const { session, login } = useGameStore();

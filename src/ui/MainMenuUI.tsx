@@ -3,7 +3,7 @@ import { IRefPhaserGame } from './PhaserGame';
 import { useGameStore } from '../store/game-store';
 import { translationManager, t } from '../services/TranslationService';
 import { GAME_VERSION, ASSET_URLS, UI_CONFIG } from '../shared/constants';
-import { Button } from '../components/ui/button';
+import { Button } from './basic/button';
 
 interface IProps {
     phaserRef: React.RefObject<IRefPhaserGame>;

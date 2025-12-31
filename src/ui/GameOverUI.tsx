@@ -1,8 +1,8 @@
 import React from 'react';
 import { useGameStore } from '../store/game-store';
 import { EventBus } from '../shared/EventBus';
-import { Button } from '../components/ui/button';
-import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/card';
+import { Button } from './basic/button';
+import { Card, CardHeader, CardTitle, CardContent } from './basic/card';
 
 export const GameOverUI: React.FC = () => {
     const { isGameOver, resetGame } = useGameStore();

@@ -2,8 +2,8 @@ import React from 'react';
 import { useGameStore } from '../store/game-store';
 import { translationManager, t } from '../services/TranslationService';
 import { IRefPhaserGame } from './PhaserGame';
-import { Button } from '../components/ui/button';
-import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/card';
+import { Button } from './basic/button';
+import { Card, CardHeader, CardTitle, CardContent } from './basic/card';
 
 interface IProps {
     phaserRef: React.RefObject<IRefPhaserGame>;
