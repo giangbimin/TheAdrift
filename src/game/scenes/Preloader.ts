@@ -1,5 +1,5 @@
 import { Scene } from 'phaser';
-import { SCENE_KEYS, ASSET_KEYS, ASSET_URLS, COLORS } from '../../shared/constants';
+import { SCENE_KEYS, ASSET_KEYS, ASSET_URLS, COLORS, UI_CONFIG } from '../../shared/constants';
 import { t } from '../../services/TranslationService';
 import { EventBus } from '../../shared/EventBus';
 
@@ -16,28 +16,28 @@ export class Preloader extends Scene {
         const centerY = height * 0.5;
 
         // Background for the progress bar
-        const barWidth = width * 0.4;
-        const barHeight = 30;
+        const barWidth = width * UI_CONFIG.PRELOADER.BAR_WIDTH_RATIO;
+        const barHeight = UI_CONFIG.PRELOADER.BAR_HEIGHT;
 
         // Add the boot logo we loaded in the Boot Scene
-        this.add.image(centerX, height * 0.4, ASSET_KEYS.BOOT_LOGO);
+        this.add.image(centerX, height * UI_CONFIG.PRELOADER.BOOT_LOGO_Y_RATIO, ASSET_KEYS.BOOT_LOGO);
 
         // Progress bar background (outline)
-        this.add.rectangle(centerX, centerY, barWidth, barHeight).setStrokeStyle(2, COLORS.PRIMARY);
+        this.add.rectangle(centerX, centerY, barWidth, barHeight).setStrokeStyle(UI_CONFIG.PRELOADER.BAR_STROKE, COLORS.PRIMARY);
 
         // Progress bar fill
-        const barFill = this.add.rectangle(centerX - barWidth / 2 + 4, centerY, 0, barHeight - 8, COLORS.ACCENT).setOrigin(0, 0.5);
+        const barFill = this.add.rectangle(centerX - barWidth / 2 + 4, centerY, 0, barHeight - UI_CONFIG.PRELOADER.BAR_FILL_OFFSET, COLORS.ACCENT).setOrigin(0, 0.5);
 
         // Loading text using i18n
-        const loadingText = this.add.text(centerX, centerY + 50, `${t('loading')} 0%`, {
-            fontSize: '24px',
+        const loadingText = this.add.text(centerX, centerY + UI_CONFIG.PRELOADER.TEXT_OFFSET_Y, `${t('loading')} 0%`, {
+            fontSize: UI_CONFIG.PRELOADER.FONT_SIZE,
             color: '#ffffff',
-            fontFamily: 'Arial'
+            fontFamily: UI_CONFIG.PRELOADER.FONT_FAMILY
         }).setOrigin(0.5);
 
         // Use the 'progress' event emitted by the LoaderPlugin to update the loading bar
         this.load.on('progress', (progress: number) => {
-            barFill.width = (barWidth - 8) * progress;
+            barFill.width = (barWidth - UI_CONFIG.PRELOADER.BAR_FILL_OFFSET) * progress;
             loadingText.setText(`${t('loading')} ${Math.round(progress * 100)}%`);
         });
 

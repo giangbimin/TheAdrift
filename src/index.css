@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap');
+
+@import "tailwindcss";
+
+@layer base {
+    body {
+        font-family: var(--font-orbitron);
+        background-color: var(--color-nebula-bg);
+        @apply text-white overflow-hidden;
+    }
+}
+
+/* Custom Cyber Button Utilities for complex pseudo-elements */
+@layer components {
+    .btn-cyber-corner {
+        @apply absolute w-2 h-2 transition-all duration-300;
+        border-color: var(--color-nebula-cyan);
+    }
+
+    .btn-cyber-corner-tl {
+        @apply top-[-1px] left-[-1px] border-t-2 border-l-2;
+    }
+
+    .btn-cyber-corner-br {
+        @apply bottom-[-1px] right-[-1px] border-b-2 border-r-2;
+    }
+
+    /* Hover state for corners */
+    .group:hover .btn-cyber-corner {
+        @apply w-full h-full opacity-30;
+    }
+}

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useGameStore } from '../store/game-store';
+import { ASSET_URLS } from '../shared/constants';
+import { Button } from '../components/ui/button';
 
 export const LoginScreen: React.FC = () => {
     const { session, login } = useGameStore();
@@ -20,7 +22,7 @@ export const LoginScreen: React.FC = () => {
             <div className="content-wrapper">
                 {/* Left Side: Logo */}
                 <div className="left-panel">
-                    <img src="assets/nebula_grid_logo.png" alt="Nebula Grid" className="login-logo" />
+                    <img src={ASSET_URLS.BOOT_LOGO} alt="Nebula Grid" className="login-logo" />
                 </div>
 
                 {/* Vertical Divider */}
@@ -43,9 +45,9 @@ export const LoginScreen: React.FC = () => {
                             <div className="input-glow"></div>
                         </div>
 
-                        <button className="cyber-btn confirm" onClick={handleLogin}>
+                        <Button variant="cyber" size="cyber" onClick={handleLogin}>
                             INITIALIZE LINK
-                        </button>
+                        </Button>
 
                         <div className="system-status">
                             SYSTEM STATUS: <span className="online">ONLINE</span>
@@ -81,7 +83,7 @@ export const LoginScreen: React.FC = () => {
                     left: 0;
                     width: 100%;
                     height: 100%;
-                    background-image: url('assets/space_background.png');
+                    background-image: url('${ASSET_URLS.BACKGROUND}');
                     background-size: cover;
                     background-position: center;
                     opacity: 0.4;
@@ -215,61 +217,7 @@ export const LoginScreen: React.FC = () => {
                     letter-spacing: 1px;
                 }
 
-                .cyber-btn {
-                    width: 100%;
-                    padding: 15px;
-                    background: linear-gradient(90deg, rgba(0, 240, 255, 0.2), rgba(0, 240, 255, 0.4));
-                    border: 1px solid #00f0ff;
-                    color: #fff;
-                    font-family: 'Orbitron', sans-serif;
-                    font-size: 16px;
-                    font-weight: bold;
-                    cursor: pointer;
-                    text-transform: uppercase;
-                    transition: all 0.3s;
-                    box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
-                    position: relative;
-                    overflow: visible; /* Allow accents to pop if needed, but safe inside usually */
-                }
-
-                /* Corner Accents for Button */
-                .cyber-btn::before {
-                    content: '';
-                    position: absolute;
-                    top: -1px;
-                    left: -1px;
-                    width: 10px;
-                    height: 10px;
-                    border-top: 2px solid #00f0ff;
-                    border-left: 2px solid #00f0ff;
-                    transition: all 0.3s;
-                }
-
-                .cyber-btn::after {
-                    content: '';
-                    position: absolute;
-                    bottom: -1px;
-                    right: -1px;
-                    width: 10px;
-                    height: 10px;
-                    border-bottom: 2px solid #00f0ff;
-                    border-right: 2px solid #00f0ff;
-                    transition: all 0.3s;
-                }
-
-                .cyber-btn:hover {
-                    background: rgba(0, 240, 255, 0.4);
-                    color: #fff;
-                    box-shadow: 0 0 25px rgba(0, 240, 255, 0.6);
-                    border-color: #fff;
-                    /* Removed letter-spacing to prevent layout shift */
-                }
-
-                .cyber-btn:hover::before, .cyber-btn:hover::after {
-                    width: 100%;
-                    height: 100%;
-                    opacity: 0.3;
-                }
+                /* Button styles moved to CyberButton component */
 
                 .system-status {
                     margin-top: 20px;
@@ -328,7 +276,7 @@ export const LoginScreen: React.FC = () => {
                        margin-bottom: 20px;
                    }
                    
-                   input, .cyber-btn {
+                   input {
                        padding: 10px;
                        font-size: 14px;
                    }

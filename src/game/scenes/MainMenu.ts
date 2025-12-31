@@ -1,5 +1,5 @@
 import { Scene, GameObjects } from 'phaser';
-import { SCENE_KEYS, ASSET_KEYS, COLORS } from '../../shared/constants';
+import { SCENE_KEYS, ASSET_KEYS, COLORS, GAME_CONFIG } from '../../shared/constants';
 import { EventBus } from '../../shared/EventBus';
 
 export class MainMenu extends Scene {
@@ -32,16 +32,16 @@ export class MainMenu extends Scene {
     }
 
     private startGame() {
-        this.sound.play(ASSET_KEYS.CLICK_SFX);
+        this.sound.play(ASSET_KEYS.CLICK_SFX, { volume: GAME_CONFIG.AUDIO.SFX_VOLUME });
 
         // Start BGM if not started
         if (!this.bgmStarted) {
-            this.sound.play(ASSET_KEYS.MENU_BGM, { loop: true, volume: 0.5 });
+            this.sound.play(ASSET_KEYS.MENU_BGM, { loop: true, volume: GAME_CONFIG.AUDIO.DEFAULT_BGM_VOLUME });
             this.bgmStarted = true;
         }
 
-        this.cameras.main.flash(500);
-        this.time.delayedCall(500, () => {
+        this.cameras.main.flash(GAME_CONFIG.TRANSITIONS.FLASH_DURATION);
+        this.time.delayedCall(GAME_CONFIG.TRANSITIONS.DEFAULT_DURATION, () => {
             this.scene.start(SCENE_KEYS.GAME);
         });
     }

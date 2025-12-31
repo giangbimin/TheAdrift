@@ -37,7 +37,61 @@ export const COLORS = {
     BACKGROUND: 0x0f041d,
     PRIMARY: 0xffffff,
     SECONDARY: 0x000000,
-    ACCENT: 0xffcc00
+    ACCENT: 0xffcc00,
+    ERROR: 0xff0000,
+    SUCCESS: 0x00ff00
+} as const;
+
+export const UI_CONFIG = {
+    PRELOADER: {
+        BAR_WIDTH_RATIO: 0.4,
+        BAR_HEIGHT: 30,
+        BAR_STROKE: 2,
+        BAR_FILL_OFFSET: 8,
+        TEXT_OFFSET_Y: 50,
+        BOOT_LOGO_Y_RATIO: 0.4,
+        FONT_SIZE: '24px',
+        FONT_FAMILY: 'Arial'
+    },
+    TOAST: {
+        DURATION: 3000,
+        Y_OFFSET: 50
+    },
+    LOGO: {
+        DEFAULT: {
+            MAX_WIDTH: '70vw',
+            MAX_HEIGHT: '35vh'
+        },
+        MOBILE: {
+            MAX_WIDTH: '50vw',
+            MAX_HEIGHT: '40vh'
+        }
+    }
+} as const;
+
+export const GAME_CONFIG = {
+    AUDIO: {
+        DEFAULT_BGM_VOLUME: 0.5,
+        SFX_VOLUME: 1.0
+    },
+    TRANSITIONS: {
+        DEFAULT_DURATION: 500,
+        FLASH_DURATION: 500,
+        LOGO_TWEEN: 2000
+    }
+} as const;
+
+export const GAME_BALANCE = {
+    PLAYER: {
+        INITIAL_HP: 100,
+        INITIAL_XP: 0,
+        INITIAL_LEVEL: 1,
+        MAX_XP_BASE: 100
+    },
+    TIMERS: {
+        GAME_TICK: 1000,
+        HIT_TEST_DELAY: 3000
+    }
 } as const;
 
 export interface GameConfig {

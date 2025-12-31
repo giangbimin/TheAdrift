@@ -1,5 +1,5 @@
 import { Scene } from 'phaser';
-import { SCENE_KEYS, ASSET_KEYS, GAME_WIDTH, GAME_HEIGHT } from '../../shared/constants';
+import { SCENE_KEYS, ASSET_KEYS, GAME_WIDTH, GAME_HEIGHT, GAME_BALANCE } from '../../shared/constants';
 import { EventBus } from '../../shared/EventBus';
 
 export class Game extends Scene {
@@ -9,11 +9,11 @@ export class Game extends Scene {
 
     // Game stats
     private stats = {
-        hp: 100,
-        maxHp: 100,
-        xp: 0,
-        maxXp: 100,
-        level: 1,
+        hp: GAME_BALANCE.PLAYER.INITIAL_HP,
+        maxHp: GAME_BALANCE.PLAYER.INITIAL_HP,
+        xp: GAME_BALANCE.PLAYER.INITIAL_XP,
+        maxXp: GAME_BALANCE.PLAYER.MAX_XP_BASE,
+        level: GAME_BALANCE.PLAYER.INITIAL_LEVEL,
         score: 0,
         timer: 0
     };
@@ -27,11 +27,11 @@ export class Game extends Scene {
 
         // Reset stats for new game
         this.stats = {
-            hp: 100,
-            maxHp: 100,
-            xp: 0,
-            maxXp: 100,
-            level: 1,
+            hp: GAME_BALANCE.PLAYER.INITIAL_HP,
+            maxHp: GAME_BALANCE.PLAYER.INITIAL_HP,
+            xp: GAME_BALANCE.PLAYER.INITIAL_XP,
+            maxXp: GAME_BALANCE.PLAYER.MAX_XP_BASE,
+            level: GAME_BALANCE.PLAYER.INITIAL_LEVEL,
             score: 0,
             timer: 0
         };
@@ -55,7 +55,7 @@ export class Game extends Scene {
 
         // Game Timer
         this.timerEvent = this.time.addEvent({
-            delay: 1000,
+            delay: GAME_BALANCE.TIMERS.GAME_TICK,
             callback: () => {
                 if (!this.isPaused) {
                     this.stats.timer++;
@@ -65,8 +65,8 @@ export class Game extends Scene {
             loop: true
         });
 
-        // Test: Trigger screen flash after 3 seconds
-        this.time.delayedCall(3000, () => {
+        // Test: Trigger screen flash after X seconds
+        this.time.delayedCall(GAME_BALANCE.TIMERS.HIT_TEST_DELAY, () => {
             EventBus.emit('player-hit');
         });
 
