@@ -5,6 +5,8 @@ import { MainMenu } from './scenes/MainMenu';
 import { AUTO, Game, Scale } from 'phaser';
 import { Preloader } from './scenes/Preloader';
 import { OrientationOverlay } from './scenes/OrientationOverlay';
+import { GlobalScene } from './scenes/GlobalScene';
+import { OverlayScene } from './scenes/OverlayScene';
 import { SCENE_KEYS, GAME_WIDTH, GAME_HEIGHT, COLORS, GAME_VERSION } from '../shared/constants';
 import { EventBus } from '../shared/EventBus';
 
@@ -17,8 +19,10 @@ const config: Phaser.Types.Core.GameConfig = {
     parent: 'game-container',
     backgroundColor: COLORS.BACKGROUND,
     scale: {
-        mode: Scale.FIT,
-        autoCenter: Scale.CENTER_BOTH
+        mode: Scale.RESIZE,
+        autoCenter: Scale.CENTER_BOTH,
+        width: '100%',
+        height: '100%'
     },
     physics: {
         default: 'arcade',
@@ -28,11 +32,13 @@ const config: Phaser.Types.Core.GameConfig = {
     },
     scene: [
         Boot,
+        GlobalScene,
         Preloader,
         MainMenu,
         MainGame,
         GameOver,
-        OrientationOverlay
+        OrientationOverlay,
+        OverlayScene
     ]
 };
 
@@ -92,7 +98,7 @@ const StartGame = (parent: string) => {
     ].join(';');
 
     console.log(
-        `%c 🧛 VAMPIRE SURVIVOR CLONE | v${GAME_VERSION} | ${isDev ? 'DEBUG MODE' : 'PRODUCTION'} `,
+        `%c 🌌 NEBULA GRID | v${GAME_VERSION} | ${isDev ? 'DEBUG MODE' : 'PRODUCTION'} `,
         logStyle
     );
 

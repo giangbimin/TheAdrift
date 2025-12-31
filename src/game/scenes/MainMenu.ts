@@ -21,17 +21,7 @@ export class MainMenu extends Scene {
             .setOrigin(0.5)
             .setDisplaySize(width, height);
 
-        // Animated Logo
-        this.logo = this.add.image(centerX, height * 0.3, ASSET_KEYS.PHASER_LOGO);
-
-        this.tweens.add({
-            targets: this.logo,
-            y: (height * 0.3) - 20,
-            duration: 2000,
-            ease: 'Sine.easeInOut',
-            yoyo: true,
-            repeat: -1
-        });
+        // Logo handled by React UI (MainMenuUI.tsx)
 
         // Listen for React UI events
         this.events.on('ui-start-game', () => this.startGame());

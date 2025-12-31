@@ -14,6 +14,10 @@ export class Boot extends Scene {
 
     create() {
         console.log('[Phaser] Boot Scene Create');
+
+        // Launch GlobalScene as persistent
+        this.scene.launch(SCENE_KEYS.GLOBAL);
+
         EventBus.emit('current-scene-ready', this);
         this.scene.start(SCENE_KEYS.PRELOADER);
     }

@@ -11,21 +11,17 @@ export class GameOver extends Scene {
     }
 
     create() {
-        this.camera = this.cameras.main
-        this.camera.setBackgroundColor(0xff0000);
+        // Stop all sounds
+        this.game.sound.stopAll();
 
-        this.background = this.add.image(GAME_WIDTH / 2, GAME_HEIGHT / 2, ASSET_KEYS.BACKGROUND);
-        this.background.setAlpha(0.5);
+        // Notify React to show Game Over UI
+        EventBus.emit('game-over', true);
 
-        this.gameover_text = this.add.text(GAME_WIDTH / 2, GAME_HEIGHT / 2, 'Game Over', {
-            fontFamily: 'Arial Black', fontSize: 64, color: '#ffffff',
-            stroke: '#000000', strokeThickness: 8,
-            align: 'center'
-        });
-        this.gameover_text.setOrigin(0.5);
-
-        this.input.once('pointerdown', () => {
+        // Listen for restart
+        const restartListener = () => {
             this.scene.start(SCENE_KEYS.MAIN_MENU);
-        });
+            EventBus.removeListener('ui-restart-game', restartListener);
+        };
+        EventBus.on('ui-restart-game', restartListener);
     }
 }
